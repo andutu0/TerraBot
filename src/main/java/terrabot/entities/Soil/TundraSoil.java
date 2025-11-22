@@ -9,6 +9,8 @@ public final class TundraSoil extends Soil {
     private static final double NITROGEN_MULTIPLIER = 0.7;
     private static final double ORGANIC_MATTER_MULTIPLIER = 0.5;
     private static final double PERMA_FROST_MULTIPLIER = 1.5;
+    private static final double STUCK_BASE = 50;
+    private static final double MAX = 100;
     @Getter @Setter
     private double permafrostDepth;
 
@@ -19,6 +21,10 @@ public final class TundraSoil extends Soil {
         this.setSoilpH(input.getSoilpH());
         this.setOrganicMatter(input.getOrganicMatter());
         this.permafrostDepth = input.getPermafrostDepth();
+    }
+    @Override
+    public double computeStuckChance() {
+        return ((STUCK_BASE - permafrostDepth) / STUCK_BASE * MAX);
     }
 
     @Override

@@ -8,6 +8,7 @@ import fileio.SimulationInput;
 import lombok.Getter;
 import terrabot.commands.PrintEnvConditions;
 import terrabot.commands.MapOutput;
+import terrabot.commands.MoveRobot;
 import terrabot.entities.Position;
 import terrabot.map.Map;
 import terrabot.map.MapInit;
@@ -72,6 +73,14 @@ public final class Simulation {
                 } else {
                     ArrayNode output = MapOutput.build(map, this);
                     node.set("output", output);
+                }
+            }
+            case "moveRobot" -> {
+                if (!started) {
+                    node.put("message", "ERROR: Simulation not started. Cannot perform action");
+                } else {
+                    ObjectNode moveNode = MoveRobot.move(robot, map);
+                    node.put("message", moveNode.get("message").asText());
                 }
             }
             default -> {

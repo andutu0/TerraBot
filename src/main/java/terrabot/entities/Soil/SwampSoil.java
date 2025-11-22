@@ -9,6 +9,7 @@ public final class SwampSoil extends Soil {
     private static final double NITROGEN_MULTIPLIER = 1.1;
     private static final double ORGANIC_MATTER_MULTIPLIER = 2.2;
     private static final double WATER_LOGGING_MULTIPLIER = 5;
+    private static final int STUCK_MULTIPLIER = 10;
 
     @Getter @Setter
     private double waterLogging;
@@ -20,6 +21,11 @@ public final class SwampSoil extends Soil {
         this.setSoilpH(input.getSoilpH());
         this.setOrganicMatter(input.getOrganicMatter());
         this.waterLogging = input.getWaterLogging();
+    }
+
+    @Override
+    public double computeStuckChance() {
+        return (waterLogging * STUCK_MULTIPLIER);
     }
 
     @Override

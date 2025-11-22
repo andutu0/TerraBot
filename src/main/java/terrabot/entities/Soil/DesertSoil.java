@@ -8,6 +8,7 @@ import lombok.Setter;
 public final class DesertSoil extends Soil {
     private static final double NITROGEN_MULTIPLIER = 0.5;
     private static final double WATER_RETENTION_MULTIPLIER = 0.3;
+    private static final int MAX = 100;
     @Getter @Setter
     private double salinity;
 
@@ -18,6 +19,11 @@ public final class DesertSoil extends Soil {
         this.setSoilpH(input.getSoilpH());
         this.setOrganicMatter(input.getOrganicMatter());
         this.salinity = input.getSalinity();
+    }
+
+    @Override
+    public double computeStuckChance() {
+        return ((MAX - getWaterRetention() + salinity) / MAX * MAX);
     }
 
     @Override

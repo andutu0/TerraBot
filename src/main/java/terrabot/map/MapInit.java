@@ -10,6 +10,8 @@ import fileio.AnimalInput;
 import fileio.PairInput;
 import terrabot.entities.Air.Air;
 import terrabot.entities.Air.AirGenerator;
+import terrabot.entities.Animal.AnimalGenerator;
+import terrabot.entities.Plant.PlantGenerator;
 import terrabot.entities.Soil.Soil;
 import terrabot.entities.Soil.SoilGenerator;
 import terrabot.entities.Animal.Animal;
@@ -72,7 +74,7 @@ public final class MapInit {
 
         for (PlantInput plantInput : territory.getPlants()) {
             for (PairInput p : plantInput.getSections()) {
-                Plant plant = new Plant(plantInput);
+                Plant plant = PlantGenerator.fromInput(plantInput);
 
                 Position pos = new Position(p.getX(), p.getY());
                 plant.setPosition(pos);
@@ -83,7 +85,7 @@ public final class MapInit {
 
         for (AnimalInput animalInput : territory.getAnimals()) {
             for (PairInput p : animalInput.getSections()) {
-                Animal animal = new Animal(animalInput);
+                Animal animal = AnimalGenerator.fromInput(animalInput);
 
                 Position pos = new Position(p.getX(), p.getY());
                 animal.setPosition(pos);

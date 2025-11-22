@@ -19,6 +19,7 @@ public final class SoilGenerator {
             case "SwampSoil"  -> new SwampSoil(input);
             case "TundraSoil" -> new TundraSoil(input);
             case "DesertSoil" -> new DesertSoil(input);
+            case "GrasslandSoil"  -> new GrasslandSoil(input);
             default -> throw new IllegalArgumentException("Unknown soil type: " + input.getType());
         };
     }

@@ -9,6 +9,10 @@ public final class GrasslandSoil extends Soil {
     private static final double NITROGEN_MULTIPLIER = 1.3;
     private static final double ORGANIC_MATTER_MULTIPLIER = 1.5;
     private static final double ROOT_DENSITY_MULTIPLIER = 0.8;
+    private static final int ROOT_DENSITY_BASE = 50;
+    private static final double WATER_RETENTION_MULTIPLIER = 0.5;
+    private static final int WATER_RETENTION_DIVDER = 75;
+    private static final int MAX = 100;
     @Getter @Setter
     private double rootDensity;
 
@@ -19,6 +23,12 @@ public final class GrasslandSoil extends Soil {
         this.setSoilpH(input.getSoilpH());
         this.setOrganicMatter(input.getOrganicMatter());
         this.rootDensity = input.getRootDensity();
+    }
+
+    @Override
+    public double computeStuckChance() {
+        return (((ROOT_DENSITY_BASE - rootDensity) + getWaterRetention()
+                * WATER_RETENTION_MULTIPLIER) / WATER_RETENTION_DIVDER * MAX);
     }
 
     @Override

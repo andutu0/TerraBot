@@ -10,6 +10,10 @@ public final class ForestSoil extends Soil {
     private static final double ORGANIC_MATTER_MULTIPLIER = 2;
     private static final double WATER_RETENTION_MULTIPLIER = 1.5;
     private static final double LEAF_LITTER_MULTIPLIER = 0.3;
+    private static final double WR_MULTIPLIER_STUCK = 0.6;
+    private static final double LL_MULTIPLIER_STUCK = 0.4;
+    private static final int LL_DIVIDER_STUCK = 80;
+    private static final int MAX = 100;
     @Getter @Setter
     private double leafLitter;
 
@@ -20,6 +24,13 @@ public final class ForestSoil extends Soil {
         this.setSoilpH(input.getSoilpH());
         this.setOrganicMatter(input.getOrganicMatter());
         this.leafLitter = input.getLeafLitter();
+    }
+
+    @Override
+    public double computeStuckChance() {
+        return ((getWaterRetention() * WR_MULTIPLIER_STUCK
+                + leafLitter * LL_MULTIPLIER_STUCK) / LL_DIVIDER_STUCK
+                * MAX);
     }
 
     @Override

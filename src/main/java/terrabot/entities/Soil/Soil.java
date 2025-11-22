@@ -36,6 +36,12 @@ public abstract class Soil extends Entity {
     }
 
     /**
+     * Computes the chance to get stuck in a specific type of soil.
+     *
+     * @return the change to get stuck.
+     */
+    public abstract double computeStuckChance();
+    /**
      * Computes the soil quality using the formula specific to each soil type.
      *
      * @return the normalized soil quality score in the range [0, 100]

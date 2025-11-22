@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import fileio.AnimalInput;
 
-public class Animal extends Entity {
+public abstract class Animal extends Entity {
     @Getter @Setter
     private String type;
 
@@ -13,4 +13,11 @@ public class Animal extends Entity {
         super(input.getName(), input.getMass());
         this.type = input.getType();
     }
+
+    /**
+     * Computes the probability of a specific type of animal to attack the robot.
+     *
+     * @return the computed attack chance
+     */
+    public abstract double calculateAttackChance();
 }

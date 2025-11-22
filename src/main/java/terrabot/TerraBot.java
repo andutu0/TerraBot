@@ -12,38 +12,10 @@ public final class TerraBot {
 
     @Getter
     @Setter
-    private int energyPoints;
+    private int energyStatus;
 
-    public TerraBot(final Position startPos, final int energyPoints) {
+    public TerraBot(final Position startPos, final int energyStatus) {
         this.position = startPos;
-        this.energyPoints = energyPoints;
-    }
-
-    /**
-     * Moves the bot one unit to the right.
-     */
-    public void moveRight() {
-        this.position.setX(this.position.getX() + 1);
-    }
-
-    /**
-     * Moves the bot one unit to the left.
-     */
-    public void moveLeft() {
-        this.position.setX(this.position.getX() - 1);
-    }
-
-    /**
-     * Moves the bot one unit up.
-     */
-    public void moveUp() {
-        this.position.setY(this.position.getY() + 1);
-    }
-
-    /**
-     * Moves the bot one unit down.
-     */
-    public void moveDown() {
-        this.position.setY(this.position.getY() - 1);
+        this.energyStatus = energyStatus;
     }
 }
