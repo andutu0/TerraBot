@@ -20,6 +20,9 @@ public abstract class Air extends Entity {
     @Getter
     @Setter
     private String type;
+    @Getter
+    @Setter
+    private double airQuality;
 
     public Air(final String name, final double mass, final String type) {
         super(name, mass);
@@ -46,6 +49,14 @@ public abstract class Air extends Entity {
      * @param node the JSON object node to be enriched
      */
     public abstract void addSpecificFields(ObjectNode node);
+
+    /**
+     * Computes the air quality score for this air type after
+     * some weather conditions.
+     *
+     * @return a score in the range [0, 100]
+     */
+    public abstract double computeWeatherChange(Double arg);
 
     protected final double normalize(final double score) {
         double clamped = Math.max(0, Math.min(MAX_SCORE, score));

@@ -6,17 +6,28 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import fileio.CommandInput;
 import fileio.SimulationInput;
 import lombok.Getter;
+import lombok.Setter;
 import terrabot.commands.PrintEnvConditions;
 import terrabot.commands.MapOutput;
 import terrabot.commands.MoveRobot;
+import terrabot.entities.Air.Air;
 import terrabot.entities.Position;
+import terrabot.map.Cell;
 import terrabot.map.Map;
 import terrabot.map.MapInit;
 import terrabot.TerraBot;
+import terrabot.commands.ChangeWeatherConditions;
 
 public final class Simulation {
     private static final int GOOD_QUALITY_THRESHOLD = 70;
     private static final int MODERATE_QUALITY_THRESHOLD = 40;
+
+    @Getter @Setter
+    private boolean weatherActive = false;
+    @Getter @Setter
+    private String activeWeatherType = null;
+    @Getter @Setter
+    private int weatherRevertAt = 0;
 
     @Getter
     private final Map map;
@@ -42,6 +53,7 @@ public final class Simulation {
     public ObjectNode processCommand(final CommandInput cmd) {
         ObjectNode node = MAPPER.createObjectNode();
         node.put("command", cmd.getCommand());
+        maybeRevertWeather(cmd.getTimestamp());
 
         if (charging && cmd.getTimestamp() < chargeUntil) {
             node.put("message", "ERROR: Robot still charging. Cannot perform action");
@@ -70,7 +82,7 @@ public final class Simulation {
                     if (!started) {
                         node.put("message", "ERROR: Simulation not started. Cannot perform action");
                     } else {
-                        ObjectNode output = PrintEnvConditions.build(map, robot);
+                        ObjectNode output = PrintEnvConditions.build(map, robot, this);
                         node.set("output", output);
                     }
                 }
@@ -109,7 +121,20 @@ public final class Simulation {
                         node.put("message", "Robot battery is charging.");
                     }
                 }
-
+                case "changeWeatherConditions" -> {
+                    if (!started) {
+                        node.put("message", "ERROR: Simulation not started. Cannot perform action");
+                    } else {
+                        boolean changed = ChangeWeatherConditions.apply(cmd, map, this);
+                        if (changed) {
+                            node.put("message", "The weather has changed.");
+                        } else {
+                            node.put("message",
+                                    "ERROR: The weather change does not affect the environment."
+                                            + "Cannot perform action");
+                        }
+                    }
+                }
                 default -> {
                     node.put("message", "ERROR: Unknown command");
                 }
@@ -134,4 +159,47 @@ public final class Simulation {
         }
         return "poor";
     }
+
+    private void maybeRevertWeather(final int currentTimestamp) {
+        if (!weatherActive || currentTimestamp < weatherRevertAt) {
+            return;
+        }
+
+        for (int y = 0; y < map.getRows(); y++) {
+            for (int x = 0; x < map.getColumns(); x++) {
+                Cell cell = map.getCell(x, y);
+                Air air = cell.getAir();
+                if (air == null) {
+                    continue;
+                }
+                if (isAffectedByWeather(air, activeWeatherType)) {
+                    air.computeAirQuality();
+                }
+            }
+        }
+
+        weatherActive = false;
+        activeWeatherType = null;
+    }
+
+    /**
+     * Checks if a specific air cell is affected by the current weather.
+     * @param air the specific air cell
+     * @param weatherType the current weather
+     * @return boolean if the current cell is affected
+     */
+    public static boolean isAffectedByWeather(final Air air, final String weatherType) {
+        final String type = air.getType();
+
+        return switch (weatherType) {
+            case "desertStorm" -> type.equals("DesertAir");
+            case "peopleHiking" -> type.equals("MountainAir");
+            case "newSeason" -> type.equals("TemperateAir");
+            case "polarStorm" -> type.equals("PolarAir");
+            case "rainfall" -> type.equals("TropicalAir");
+            default -> false;
+        };
+    }
+
+
 }

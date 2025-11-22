@@ -13,10 +13,14 @@ public final class DesertAir extends Air {
     private static final double MAX = 100.0;
     private static final double TOXICITY_MULTIPLIER = 100.0;
     private static final double MAX_SCORE = 65.0;
+    private static final double STORM_SCORE = 30;
 
     @Getter
     @Setter
     private double dustParticles;
+    @Getter
+    @Setter
+    private boolean affectedAirQuality;
 
     public DesertAir(final AirInput input) {
         super(input.getName(), input.getMass(), input.getType());
@@ -31,7 +35,10 @@ public final class DesertAir extends Air {
         double score = (getOxygenLevel() * OXYGEN_MULTIPLIER)
                 - (dustParticles * DUST_MULTIPLIER)
                 - (getTemperature() * TEMP_MULTIPLIER);
-        return normalize(score);
+        double quality = normalize(score);
+        setAirQuality(quality);
+        affectedAirQuality = false;
+        return quality;
     }
 
     @Override
@@ -44,6 +51,14 @@ public final class DesertAir extends Air {
 
     @Override
     public void addSpecificFields(final ObjectNode node) {
-        node.put("dustParticles", this.dustParticles);
+        node.put("desertStorm", affectedAirQuality);
+    }
+
+    @Override
+    public double computeWeatherChange(final Double arg) {
+        double quality = computeAirQuality() - STORM_SCORE;
+        affectedAirQuality = true;
+        setAirQuality(quality);
+        return quality;
     }
 }

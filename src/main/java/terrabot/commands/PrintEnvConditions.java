@@ -11,6 +11,7 @@ import terrabot.entities.Water.Water;
 import terrabot.entities.Position;
 import terrabot.map.Cell;
 import terrabot.map.Map;
+import terrabot.simulation.Simulation;
 
 public final class PrintEnvConditions {
     private static final ObjectMapper MAPPER = new ObjectMapper();
@@ -24,7 +25,7 @@ public final class PrintEnvConditions {
      * @param bot the TerraBot whose current position is inspected
      * @return an ObjectNode containing all environment fields for that cell
      */
-    public static ObjectNode build(final Map map, final TerraBot bot) {
+    public static ObjectNode build(final Map map, final TerraBot bot, final Simulation sim) {
         ObjectNode out = MAPPER.createObjectNode();
 
         Position pos = bot.getPosition();
@@ -82,7 +83,12 @@ public final class PrintEnvConditions {
             airNode.put("temperature", air.getTemperature());
             airNode.put("oxygenLevel", air.getOxygenLevel());
             air.addSpecificFields(airNode);
-            airNode.put("airQuality", air.computeAirQuality());
+
+            if (!sim.isWeatherActive()) {
+                air.computeAirQuality();
+            }
+
+            airNode.put("airQuality", air.getAirQuality());
             out.set("air", airNode);
         }
 

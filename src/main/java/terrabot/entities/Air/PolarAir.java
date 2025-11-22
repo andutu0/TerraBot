@@ -11,9 +11,12 @@ public final class PolarAir extends Air {
     private static final double ICE_MULTIPLIER = 0.05;
     private static final int POLAR_MAX_SCORE = 142;
     private static final double MAX = 100.0;
+    private static final double QUAL_REDUCTION = 15;
 
     @Getter @Setter
     private double iceCrystalConcentration;
+    @Getter @Setter
+    private double airQuality;
 
     public PolarAir(final AirInput input) {
         super(input.getName(), input.getMass(), input.getType());
@@ -27,7 +30,9 @@ public final class PolarAir extends Air {
     public double computeAirQuality() {
         double score = (getOxygenLevel() * 2) + (BASE_TEMP - Math.abs(getTemperature()))
                         - (iceCrystalConcentration * ICE_MULTIPLIER);
-        return normalize(score);
+        double quality = normalize(score);
+        setAirQuality(quality);
+        return quality;
     }
 
     @Override
@@ -40,5 +45,11 @@ public final class PolarAir extends Air {
     @Override
     public void addSpecificFields(final ObjectNode node) {
         node.put("iceCrystalConcentration", this.iceCrystalConcentration);
+    }
+
+    @Override
+    public double computeWeatherChange(final Double arg) {
+        setAirQuality(computeAirQuality() - QUAL_REDUCTION);
+        return (computeAirQuality() - QUAL_REDUCTION);
     }
 }

@@ -13,10 +13,14 @@ public final class TropicalAir extends Air {
     private static final double MAX = 100.0;
     private static final double TOXICITY_MULTIPLIER = 100.0;
     private static final double MAX_SCORE = 82.0;
+    private static final double RAINFALL_MULTIPLIER = 0.3;
 
     @Getter
     @Setter
     private double co2Level;
+    @Getter
+    @Setter
+    private boolean affectedAirQuality;
 
     public TropicalAir(final AirInput input) {
         super(input.getName(), input.getMass(), input.getType());
@@ -31,7 +35,10 @@ public final class TropicalAir extends Air {
         double score = (getOxygenLevel() * OXYGEN_MULTIPLIER)
                 + (getHumidity() * HUMIDITY_MULTIPLIER)
                 - (co2Level * CO2_MULTIPLIER);
-        return normalize(score);
+        double quality = normalize(score);
+        setAirQuality(quality);
+        affectedAirQuality = false;
+        return quality;
     }
 
     @Override
@@ -44,5 +51,13 @@ public final class TropicalAir extends Air {
     @Override
     public void addSpecificFields(final ObjectNode node) {
         node.put("co2Level", this.getCo2Level());
+    }
+
+    @Override
+    public double computeWeatherChange(final Double arg) {
+        double quality = computeAirQuality() - arg * RAINFALL_MULTIPLIER;
+        setAirQuality(quality);
+        affectedAirQuality = true;
+        return quality;
     }
 }
