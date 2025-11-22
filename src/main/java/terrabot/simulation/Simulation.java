@@ -23,6 +23,8 @@ public final class Simulation {
     @Getter
     private final TerraBot robot;
     private boolean started = false;
+    private int chargeUntil = 0;
+    private boolean charging = false;
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
@@ -40,54 +42,81 @@ public final class Simulation {
     public ObjectNode processCommand(final CommandInput cmd) {
         ObjectNode node = MAPPER.createObjectNode();
         node.put("command", cmd.getCommand());
-        node.put("timestamp", cmd.getTimestamp());
 
-        switch (cmd.getCommand()) {
-            case "startSimulation" -> {
-                if (started) {
-                    node.put("message", "ERROR: Simulation already started. Cannot perform action");
-                } else {
-                    started = true;
-                    node.put("message", "Simulation has started.");
+        if (charging && cmd.getTimestamp() < chargeUntil) {
+            node.put("message", "ERROR: Robot still charging. Cannot perform action");
+            node.put("timestamp", cmd.getTimestamp());
+            return node;
+        } else {
+            switch (cmd.getCommand()) {
+                case "startSimulation" -> {
+                    if (started) {
+                        node.put("message",
+                                "ERROR: Simulation already started. Cannot perform action");
+                    } else {
+                        started = true;
+                        node.put("message", "Simulation has started.");
+                    }
                 }
-            }
-            case "endSimulation" -> {
-                if (!started) {
-                    node.put("message", "ERROR: Simulation not started. Cannot perform action");
-                } else {
-                    started = false;
-                    node.put("message", "Simulation has ended.");
+                case "endSimulation" -> {
+                    if (!started) {
+                        node.put("message", "ERROR: Simulation not started. Cannot perform action");
+                    } else {
+                        started = false;
+                        node.put("message", "Simulation has ended.");
+                    }
                 }
-            }
-            case "printEnvConditions" -> {
-                if (!started) {
-                    node.put("message", "ERROR: Simulation not started. Cannot perform action");
-                } else {
-                    ObjectNode output = PrintEnvConditions.build(map, robot);
-                    node.set("output", output);
+                case "printEnvConditions" -> {
+                    if (!started) {
+                        node.put("message", "ERROR: Simulation not started. Cannot perform action");
+                    } else {
+                        ObjectNode output = PrintEnvConditions.build(map, robot);
+                        node.set("output", output);
+                    }
                 }
-            }
-            case "printMap" -> {
-                if (!started) {
-                    node.put("message", "ERROR: Simulation not started. Cannot perform action");
-                } else {
-                    ArrayNode output = MapOutput.build(map, this);
-                    node.set("output", output);
+                case "printMap" -> {
+                    if (!started) {
+                        node.put("message", "ERROR: Simulation not started. Cannot perform action");
+                    } else {
+                        ArrayNode output = MapOutput.build(map, this);
+                        node.set("output", output);
+                    }
                 }
-            }
-            case "moveRobot" -> {
-                if (!started) {
-                    node.put("message", "ERROR: Simulation not started. Cannot perform action");
-                } else {
-                    ObjectNode moveNode = MoveRobot.move(robot, map);
-                    node.put("message", moveNode.get("message").asText());
+                case "moveRobot" -> {
+                    if (!started) {
+                        node.put("message", "ERROR: Simulation not started. Cannot perform action");
+                    } else {
+                        ObjectNode moveNode = MoveRobot.move(robot, map);
+                        node.put("message", moveNode.get("message").asText());
+                    }
                 }
-            }
-            default -> {
-                node.put("message", "ERROR: Unknown command");
+                case "getEnergyStatus" -> {
+                    if (!started) {
+                        node.put("message", "ERROR: Simulation not started. Cannot perform action");
+                    } else {
+                        node.put("message", "TerraBot has "
+                                + robot.getEnergyStatus() + " energy points left.");
+                    }
+                }
+                case "rechargeBattery" -> {
+                    if (!started) {
+                        node.put("message", "ERROR: Simulation not started. Cannot perform action");
+                    } else {
+                        charging = true;
+                        int amountToCharge = cmd.getTimeToCharge();
+                        chargeUntil = cmd.getTimestamp() +  amountToCharge;
+                        robot.setEnergyStatus(robot.getEnergyStatus() + amountToCharge);
+                        node.put("message", "Robot battery is charging.");
+                    }
+                }
+
+                default -> {
+                    node.put("message", "ERROR: Unknown command");
+                }
             }
         }
 
+        node.put("timestamp", cmd.getTimestamp());
         return node;
     }
 

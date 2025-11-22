@@ -19,6 +19,8 @@ public final class AirGenerator {
             case "MountainAir"  -> new MountainAir(input);
             case "TemperateAir" -> new TemperateAir(input);
             case "TropicalAir"  -> new TropicalAir(input);
+            case "PolarAir"     -> new PolarAir(input);
+            case "DesertAir"    -> new DesertAir(input);
             default -> throw new IllegalArgumentException(
                     "Unknown air type: " + input.getType()
             );
