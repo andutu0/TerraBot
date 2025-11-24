@@ -10,9 +10,14 @@ public abstract class Entity {
     private final double mass;
     @Setter @Getter
     private Position position;
+    @Getter @Setter
+    private boolean scanned;
+    @Getter @Setter
+    private int scannedTimestamp;
 
     public Entity(final String name, final double mass) {
         this.name = name;
         this.mass = mass;
+        scanned = false;
     }
 }

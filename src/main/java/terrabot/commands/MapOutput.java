@@ -26,8 +26,8 @@ public final class MapOutput {
         int width = map.getColumns();
         int height = map.getRows();
 
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
+        for (int y = 0; y < height; ++y) {
+            for (int x = 0; x < width; ++x) {
                 Cell cell = map.getCell(x, y);
 
                 ObjectNode cellNode = MAPPER.createObjectNode();

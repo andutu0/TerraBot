@@ -8,14 +8,13 @@ import terrabot.entities.Entity;
 public abstract class Air extends Entity {
     private static final int MAX_SCORE = 100;
     private static final double ROUND_FACTOR = 100.0;
+    private static final double DECIMAL_ROUND = 10.0;
     @Getter
     @Setter
     private double humidity;
     @Getter
     @Setter
     private double temperature;
-    @Getter
-    @Setter
     private double oxygenLevel;
     @Getter
     @Setter
@@ -27,6 +26,22 @@ public abstract class Air extends Entity {
     public Air(final String name, final double mass, final String type) {
         super(name, mass);
         this.type = type;
+    }
+
+    /**
+     * Returns the oxygen level rounded to 1 decimal.
+     * Subclasses should not override this method.
+     */
+    public double getOxygenLevel() {
+        return Math.round(oxygenLevel * DECIMAL_ROUND) / DECIMAL_ROUND;
+    }
+
+    /**
+     * Sets the oxygen level rounded to 1 decimal.
+     * Subclasses should not override this method.
+     */
+    public void setOxygenLevel(final double value) {
+        this.oxygenLevel = Math.round(value * DECIMAL_ROUND) / DECIMAL_ROUND;
     }
 
     /**
@@ -56,7 +71,7 @@ public abstract class Air extends Entity {
      *
      * @return a score in the range [0, 100]
      */
-    public abstract double computeWeatherChange(Double arg);
+    public abstract void computeWeatherChange(Double arg);
 
     protected final double normalize(final double score) {
         double clamped = Math.max(0, Math.min(MAX_SCORE, score));

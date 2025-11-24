@@ -43,8 +43,10 @@ public final class MountainAir extends Air {
 
     @Override
     public double computeToxicity() {
-        double aq = computeAirQuality();
+        computeAirQuality();
+        double aq = getAirQuality();
         double toxicity = TOXICITY_MULTIPLIER * (1 - aq / MAX_SCORE);
+        toxicity = Math.max(toxicity, 0);
         return Math.round(toxicity * MAX) / MAX;
     }
 
@@ -54,9 +56,8 @@ public final class MountainAir extends Air {
     }
 
     @Override
-    public double computeWeatherChange(final Double arg) {
+    public void computeWeatherChange(final Double arg) {
         affectedAirQuality = true;
-        setAirQuality(computeAirQuality() - arg * HUMIDITY_MULTIPLIER);
-        return (computeAirQuality() - arg * HUMIDITY_MULTIPLIER);
+        setAirQuality(getAirQuality() - arg * HUMIDITY_MULTIPLIER);
     }
 }

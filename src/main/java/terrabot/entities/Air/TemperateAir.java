@@ -43,8 +43,10 @@ public final class TemperateAir extends Air {
 
     @Override
     public double computeToxicity() {
-        double aq = computeAirQuality();
+        computeAirQuality();
+        double aq = getAirQuality();
         double toxicity = TOXICITY_MULTIPLIER * (1 - aq / MAX_SCORE);
+        toxicity = Math.max(toxicity, 0);
         return Math.round(toxicity * MAX) / MAX;
     }
 
@@ -54,10 +56,9 @@ public final class TemperateAir extends Air {
     }
 
     @Override
-    public double computeWeatherChange(final Double arg) {
-        double quality = computeAirQuality() - QUAL_REDUCTION;
+    public void computeWeatherChange(final Double arg) {
+        double quality = getAirQuality() - QUAL_REDUCTION;
         affectedAirQuality = true;
         setAirQuality(quality);
-        return quality;
     }
 }

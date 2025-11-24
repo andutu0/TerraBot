@@ -16,7 +16,7 @@ public final class PolarAir extends Air {
     @Getter @Setter
     private double iceCrystalConcentration;
     @Getter @Setter
-    private double airQuality;
+    private boolean affectedAirQuality;
 
     public PolarAir(final AirInput input) {
         super(input.getName(), input.getMass(), input.getType());
@@ -37,8 +37,10 @@ public final class PolarAir extends Air {
 
     @Override
     public double computeToxicity() {
-        double aq = computeAirQuality();
+        computeAirQuality();
+        double aq = getAirQuality();
         double toxicity = BASE_TEMP * (1 - aq / POLAR_MAX_SCORE);
+        toxicity = Math.max(toxicity, 0);
         return Math.round(toxicity * MAX) / MAX;
     }
 
@@ -48,8 +50,8 @@ public final class PolarAir extends Air {
     }
 
     @Override
-    public double computeWeatherChange(final Double arg) {
-        setAirQuality(computeAirQuality() - QUAL_REDUCTION);
-        return (computeAirQuality() - QUAL_REDUCTION);
+    public void computeWeatherChange(final Double arg) {
+        setAffectedAirQuality(true);
+        setAirQuality(getAirQuality() - QUAL_REDUCTION);
     }
 }

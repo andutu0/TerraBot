@@ -7,16 +7,18 @@ import fileio.CommandInput;
 import fileio.SimulationInput;
 import lombok.Getter;
 import lombok.Setter;
-import terrabot.commands.PrintEnvConditions;
+import terrabot.commands.ChangeWeatherConditions;
 import terrabot.commands.MapOutput;
 import terrabot.commands.MoveRobot;
+import terrabot.commands.ScanObject;
+import terrabot.commands.PrintEnvConditions;
 import terrabot.entities.Air.Air;
+import terrabot.entities.Interactions;
 import terrabot.entities.Position;
 import terrabot.map.Cell;
 import terrabot.map.Map;
 import terrabot.map.MapInit;
 import terrabot.TerraBot;
-import terrabot.commands.ChangeWeatherConditions;
 
 public final class Simulation {
     private static final int GOOD_QUALITY_THRESHOLD = 70;
@@ -54,7 +56,9 @@ public final class Simulation {
         ObjectNode node = MAPPER.createObjectNode();
         node.put("command", cmd.getCommand());
         maybeRevertWeather(cmd.getTimestamp());
-
+        if (started) {
+            Interactions.interact(map, this);
+        }
         if (charging && cmd.getTimestamp() < chargeUntil) {
             node.put("message", "ERROR: Robot still charging. Cannot perform action");
             node.put("timestamp", cmd.getTimestamp());
@@ -133,6 +137,14 @@ public final class Simulation {
                                     "ERROR: The weather change does not affect the environment."
                                             + "Cannot perform action");
                         }
+                    }
+                }
+                case "scanObject" -> {
+                    if (!started) {
+                        node.put("message", "ERROR: Simulation not started. Cannot perform action");
+                    } else {
+                        ObjectNode scanNode = ScanObject.scan(robot, map, cmd);
+                        node.put("message", scanNode.get("message").asText());
                     }
                 }
                 default -> {

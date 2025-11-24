@@ -27,7 +27,7 @@ public final class TropicalAir extends Air {
         setHumidity(input.getHumidity());
         setTemperature(input.getTemperature());
         setOxygenLevel(input.getOxygenLevel());
-        this.co2Level = input.getCo2Level();
+        this.co2Level = Math.round(input.getCo2Level() * MAX) / MAX;
     }
 
     @Override
@@ -43,8 +43,10 @@ public final class TropicalAir extends Air {
 
     @Override
     public double computeToxicity() {
-        double aq = computeAirQuality();
+        computeAirQuality();
+        double aq = getAirQuality();
         double toxicity = TOXICITY_MULTIPLIER * (1 - aq / MAX_SCORE);
+        toxicity = Math.max(toxicity, 0);
         return Math.round(toxicity * MAX) / MAX;
     }
 
@@ -54,10 +56,9 @@ public final class TropicalAir extends Air {
     }
 
     @Override
-    public double computeWeatherChange(final Double arg) {
-        double quality = computeAirQuality() - arg * RAINFALL_MULTIPLIER;
+    public void computeWeatherChange(final Double arg) {
+        double quality = getAirQuality() - arg * RAINFALL_MULTIPLIER;
         setAirQuality(quality);
         affectedAirQuality = true;
-        return quality;
     }
 }

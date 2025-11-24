@@ -11,6 +11,8 @@ import terrabot.simulation.Simulation;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The entry point to this homework. It runs the checker that tests your implementation.
@@ -33,12 +35,37 @@ public final class Main {
         InputLoader inputLoader = new InputLoader(inputPath);
         ArrayNode output = MAPPER.createArrayNode();
 
-        // pentru fiecare simulare din fișier
+        List<Simulation> simulations = new ArrayList<>();
         for (SimulationInput simInput : inputLoader.getSimulations()) {
-            Simulation simulation = new Simulation(simInput);
+            simulations.add(new Simulation(simInput));
+        }
 
-            for (CommandInput cmd : inputLoader.getCommands()) {
-                ObjectNode cmdOut = simulation.processCommand(cmd);
+        int currentSimulationIndex = -1;
+        Simulation currentSimulation = null;
+
+        for (CommandInput cmd : inputLoader.getCommands()) {
+            if ("startSimulation".equals(cmd.getCommand())) {
+                ++currentSimulationIndex;
+                if (currentSimulationIndex >= simulations.size()) {
+                    ObjectNode node = MAPPER.createObjectNode();
+                    node.put("command", cmd.getCommand());
+                    node.put("message",
+                            "ERROR: Simulation already started. Cannot perform action");
+                    node.put("timestamp", cmd.getTimestamp());
+                    output.add(node);
+                    continue;
+                }
+                currentSimulation = simulations.get(currentSimulationIndex);
+            }
+            if (currentSimulation == null) {
+                ObjectNode node = MAPPER.createObjectNode();
+                node.put("command", cmd.getCommand());
+                node.put("message",
+                        "ERROR: Simulation not started. Cannot perform action");
+                node.put("timestamp", cmd.getTimestamp());
+                output.add(node);
+            } else {
+                ObjectNode cmdOut = currentSimulation.processCommand(cmd);
                 output.add(cmdOut);
             }
         }
@@ -46,5 +73,4 @@ public final class Main {
         File outputFile = new File(outputPath);
         WRITER.writeValue(outputFile, output);
     }
-
 }

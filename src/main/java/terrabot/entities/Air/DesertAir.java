@@ -43,10 +43,12 @@ public final class DesertAir extends Air {
 
     @Override
     public double computeToxicity() {
-        double aq = computeAirQuality();
+        computeAirQuality();
+        double aq = getAirQuality();
         double toxicity = TOXICITY_MULTIPLIER * (1 - aq / MAX_SCORE);
         // 100 is not a magic number intellij, its literally %
-        return Math.round(toxicity * MAX) / MAX;
+        toxicity = Math.max(toxicity, 0);
+        return Math.round((toxicity) * MAX) / MAX;
     }
 
     @Override
@@ -55,10 +57,9 @@ public final class DesertAir extends Air {
     }
 
     @Override
-    public double computeWeatherChange(final Double arg) {
-        double quality = computeAirQuality() - STORM_SCORE;
+    public void computeWeatherChange(final Double arg) {
+        double quality = getAirQuality() - STORM_SCORE;
         affectedAirQuality = true;
         setAirQuality(quality);
-        return quality;
     }
 }
