@@ -145,7 +145,6 @@ public final class Simulation {
                     } else {
                         ObjectNode scanNode = ScanObject.scan(robot, map, cmd);
                         node.put("message", scanNode.get("message").asText());
-                        System.out.println("baterie la scan = " + robot.getEnergyStatus());
                     }
                 }
                 default -> {
