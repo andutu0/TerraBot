@@ -9,13 +9,12 @@ public abstract class Soil extends Entity {
 
     private static final int MAX_SCORE = 100;
     private static final double ROUND_FACTOR = 100.0;
+    private static final double DECIMAL_ROUND = 10.0;
 
     @Getter
     @Setter
     private double nitrogen;
 
-    @Getter
-    @Setter
     private double waterRetention;
 
     @Getter
@@ -33,6 +32,20 @@ public abstract class Soil extends Entity {
     public Soil(final String name, final double mass, final String type) {
         super(name, mass);
         this.type = type;
+    }
+
+    /**
+     * Returns the waterRetention level rounded to 1 decimal.
+     */
+    public double getWaterRetention() {
+        return Math.round(waterRetention * ROUND_FACTOR) / ROUND_FACTOR;
+    }
+
+    /**
+     * Sets the humidity rounded to 1 decimal.
+     */
+    public void setWaterRetention(final double value) {
+        this.waterRetention = Math.round(value * ROUND_FACTOR) / ROUND_FACTOR;
     }
 
     /**

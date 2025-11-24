@@ -14,6 +14,8 @@ public final class MountainAir extends Air {
     private static final double TOXICITY_MULTIPLIER = 100.0;
     private static final double MAX_SCORE = 78.0;
     private static final double HIKER_MULTIPLIER = 0.1;
+    private static final double TOXICITY_SCORE_MULTIPLIER = 0.8;
+
 
     @Getter
     @Setter
@@ -46,8 +48,13 @@ public final class MountainAir extends Air {
         computeAirQuality();
         double aq = getAirQuality();
         double toxicity = TOXICITY_MULTIPLIER * (1 - aq / MAX_SCORE);
+        // 100 is not a magic number intellij, its literally %
         toxicity = Math.max(toxicity, 0);
-        return Math.round(toxicity * MAX) / MAX;
+        toxicity = Math.round((toxicity) * MAX) / MAX;
+        if (toxicity > MAX_SCORE * TOXICITY_SCORE_MULTIPLIER) {
+            this.setToxic(true);
+        }
+        return toxicity;
     }
 
     @Override
@@ -58,6 +65,6 @@ public final class MountainAir extends Air {
     @Override
     public void computeWeatherChange(final Double arg) {
         affectedAirQuality = true;
-        setAirQuality(getAirQuality() - arg * HUMIDITY_MULTIPLIER);
+        setAirQuality(getAirQuality() - arg * HIKER_MULTIPLIER);
     }
 }

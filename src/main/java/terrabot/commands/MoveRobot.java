@@ -67,6 +67,9 @@ public final class MoveRobot {
         if (y + 1 < height) {
             Cell down = map.getCell(x, y + 1);
             int s = score.apply(down);
+            System.out.println("baterie robot: " + robot.getEnergyStatus());
+            System.out.println("necesar: " + s);
+
             if (s < bestScore && s <= robot.getEnergyStatus()) {
                 bestScore = s;
                 bestX = x;
@@ -78,6 +81,9 @@ public final class MoveRobot {
         if (x + 1 < width) {
             Cell right = map.getCell(x + 1, y);
             int s = score.apply(right);
+            System.out.println("baterie robot: " + robot.getEnergyStatus());
+            System.out.println("necesar: " + s);
+
             if (s < bestScore && s <= robot.getEnergyStatus()) {
                 bestScore = s;
                 bestX = x + 1;
@@ -89,6 +95,9 @@ public final class MoveRobot {
         if (y - 1 >= 0) {
             Cell up = map.getCell(x, y - 1);
             int s = score.apply(up);
+            System.out.println("baterie robot: " + robot.getEnergyStatus());
+            System.out.println("necesar: " + s);
+
             if (s < bestScore && s <= robot.getEnergyStatus()) {
                 bestScore = s;
                 bestX = x;
@@ -100,6 +109,9 @@ public final class MoveRobot {
         if (x - 1 >= 0) {
             Cell left = map.getCell(x - 1, y);
             int s = score.apply(left);
+            System.out.println("baterie robot: " + robot.getEnergyStatus());
+            System.out.println("necesar: " + s);
+
             if (s < bestScore && s <= robot.getEnergyStatus()) {
                 bestScore = s;
                 bestX = x - 1;
@@ -120,6 +132,8 @@ public final class MoveRobot {
             ObjectNode res = MAPPER.createObjectNode();
             res.put("message",
                     "ERROR: Not enough battery left. Cannot perform action");
+            System.out.println("(n a mers)baterie robot: " + robot.getEnergyStatus());
+            System.out.println("necesar: " + bestScore);
 
             return res;
         }

@@ -6,8 +6,8 @@ import lombok.Setter;
 public abstract class Entity {
     @Getter
     private final String name;
-    @Getter
-    private final double mass;
+    @Getter @Setter
+    private double mass;
     @Setter @Getter
     private Position position;
     @Getter @Setter

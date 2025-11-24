@@ -30,6 +30,8 @@ public final class Simulation {
     private String activeWeatherType = null;
     @Getter @Setter
     private int weatherRevertAt = 0;
+    @Getter
+    private int currTime = 0;
 
     @Getter
     private final Map map;
@@ -56,9 +58,7 @@ public final class Simulation {
         ObjectNode node = MAPPER.createObjectNode();
         node.put("command", cmd.getCommand());
         maybeRevertWeather(cmd.getTimestamp());
-        if (started) {
-            Interactions.interact(map, this);
-        }
+
         if (charging && cmd.getTimestamp() < chargeUntil) {
             node.put("message", "ERROR: Robot still charging. Cannot perform action");
             node.put("timestamp", cmd.getTimestamp());
@@ -145,12 +145,17 @@ public final class Simulation {
                     } else {
                         ObjectNode scanNode = ScanObject.scan(robot, map, cmd);
                         node.put("message", scanNode.get("message").asText());
+                        System.out.println("baterie la scan = " + robot.getEnergyStatus());
                     }
                 }
                 default -> {
                     node.put("message", "ERROR: Unknown command");
                 }
             }
+        }
+        if (started) {
+            ++currTime;
+            Interactions.interact(map, this);
         }
 
         node.put("timestamp", cmd.getTimestamp());

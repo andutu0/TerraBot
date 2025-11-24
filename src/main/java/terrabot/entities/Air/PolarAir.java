@@ -10,8 +10,10 @@ public final class PolarAir extends Air {
     private static final int BASE_TEMP = 100;
     private static final double ICE_MULTIPLIER = 0.05;
     private static final int POLAR_MAX_SCORE = 142;
+    private static final double WEATHER_MULTIPLIER = 0.2;
     private static final double MAX = 100.0;
-    private static final double QUAL_REDUCTION = 15;
+    private static final double TOXICITY_MULTIPLIER = 100.0;
+    private static final double TOXICITY_SCORE_MULTIPLIER = 0.8;
 
     @Getter @Setter
     private double iceCrystalConcentration;
@@ -39,11 +41,14 @@ public final class PolarAir extends Air {
     public double computeToxicity() {
         computeAirQuality();
         double aq = getAirQuality();
-        double toxicity = BASE_TEMP * (1 - aq / POLAR_MAX_SCORE);
+        double toxicity = TOXICITY_MULTIPLIER * (1 - aq / MAX);
         toxicity = Math.max(toxicity, 0);
-        return Math.round(toxicity * MAX) / MAX;
+        toxicity = Math.round((toxicity) * MAX) / MAX;
+        if (toxicity > POLAR_MAX_SCORE * TOXICITY_SCORE_MULTIPLIER) {
+            this.setToxic(true);
+        }
+        return toxicity;
     }
-
     @Override
     public void addSpecificFields(final ObjectNode node) {
         node.put("iceCrystalConcentration", this.iceCrystalConcentration);
@@ -52,6 +57,6 @@ public final class PolarAir extends Air {
     @Override
     public void computeWeatherChange(final Double arg) {
         setAffectedAirQuality(true);
-        setAirQuality(getAirQuality() - QUAL_REDUCTION);
+        setAirQuality(getAirQuality() - WEATHER_MULTIPLIER * arg);
     }
 }

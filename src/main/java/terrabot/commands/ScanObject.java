@@ -23,8 +23,6 @@ public final class ScanObject {
      */
     public static ObjectNode scan(final TerraBot robot, final Map map, final CommandInput cmd) {
 
-        robot.setEnergyStatus(robot.getEnergyStatus() - ENERGY_REQUIRED);
-
         String color = cmd.getColor();
         String smell = cmd.getSmell();
         String sound = cmd.getSound();
@@ -40,6 +38,7 @@ public final class ScanObject {
             if (cell.getWater() != null) {
                 result.put("message", "The scanned object is water.");
                 cell.getWater().setScanned(true);
+                robot.setEnergyStatus(robot.getEnergyStatus() - ENERGY_REQUIRED);
                 cell.getWater().setScannedTimestamp(cmd.getTimestamp());
             } else {
                 result.put("message", "ERROR: Object not found. Cannot perform action");
@@ -51,6 +50,7 @@ public final class ScanObject {
             if (cell.getPlant() != null) {
                 result.put("message", "The scanned object is a plant.");
                 cell.getPlant().setScanned(true);
+                robot.setEnergyStatus(robot.getEnergyStatus() - ENERGY_REQUIRED);
                 cell.getPlant().setScannedTimestamp(cmd.getTimestamp());
             } else {
                 result.put("message", "ERROR: Object not found. Cannot perform action");
@@ -62,6 +62,7 @@ public final class ScanObject {
             if (cell.getAnimal() != null) {
                 result.put("message", "The scanned object is an animal.");
                 cell.getAnimal().setScanned(true);
+                robot.setEnergyStatus(robot.getEnergyStatus() - ENERGY_REQUIRED);
                 cell.getAnimal().setScannedTimestamp(cmd.getTimestamp());
             } else {
                 result.put("message", "ERROR: Object not found. Cannot perform action");
