@@ -11,7 +11,7 @@ public final class GrasslandSoil extends Soil {
     private static final double ROOT_DENSITY_MULTIPLIER = 0.8;
     private static final int ROOT_DENSITY_BASE = 50;
     private static final double WATER_RETENTION_MULTIPLIER = 0.5;
-    private static final int WATER_RETENTION_DIVDER = 75;
+    private static final int WATER_RETENTION_DIVIDER = 75;
     private static final int MAX = 100;
     @Getter @Setter
     private double rootDensity;
@@ -28,7 +28,7 @@ public final class GrasslandSoil extends Soil {
     @Override
     public double computeStuckChance() {
         return (((ROOT_DENSITY_BASE - rootDensity) + getWaterRetention()
-                * WATER_RETENTION_MULTIPLIER) / WATER_RETENTION_DIVDER * MAX);
+                * WATER_RETENTION_MULTIPLIER) / WATER_RETENTION_DIVIDER * MAX);
     }
 
     @Override
@@ -41,6 +41,6 @@ public final class GrasslandSoil extends Soil {
 
     @Override
     public void addSpecificFields(final ObjectNode node) {
-        node.put("rootDensity", this.getRootDensity());
+        node.put("rootDensity", rootDensity);
     }
 }

@@ -37,6 +37,6 @@ public final class TundraSoil extends Soil {
 
     @Override
     public void addSpecificFields(final ObjectNode node) {
-        node.put("permafrostDepth", this.getPermafrostDepth());
+        node.put("permafrostDepth", permafrostDepth);
     }
 }

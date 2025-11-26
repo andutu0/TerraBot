@@ -19,4 +19,6 @@ public class Cell {
     private Plant plant;
     @Getter @Setter
     private Animal animal;
+    @Getter @Setter
+    private Animal prey;
 }

@@ -6,6 +6,12 @@ import lombok.Setter;
 import terrabot.entities.Entity;
 
 public abstract class Plant extends Entity {
+    private static final double YOUNG = 0.2;
+    private static final double MATURE = 0.7;
+    private static final double OLD = 0.4;
+    private static final int AGE_YOUNG = 1;
+    private static final int AGE_MATURE = 2;
+    private static final int AGE_OLD = 3;
     @Getter @Setter
     private String type;
     @Getter
@@ -49,4 +55,22 @@ public abstract class Plant extends Entity {
      * @return the oxygen amount released by a plant
      */
     public abstract double releaseOxygen();
+
+    /**
+     * helper for releaseOxygen to remove duplicate code
+     * in the subclasses
+     *
+     * @param releaseAmount type-specific amount to add
+     * @return computed oxygen release (non-negative)
+     */
+    protected double computeReleaseOxygen(final double releaseAmount) {
+        if (plantAge == AGE_YOUNG) {
+            return releaseAmount + YOUNG;
+        } else if (plantAge == AGE_MATURE) {
+            return releaseAmount + MATURE;
+        } else if (plantAge == AGE_OLD) {
+            return releaseAmount + OLD;
+        }
+        return 0;
+    }
 }

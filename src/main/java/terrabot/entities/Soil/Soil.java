@@ -9,7 +9,6 @@ public abstract class Soil extends Entity {
 
     private static final int MAX_SCORE = 100;
     private static final double ROUND_FACTOR = 100.0;
-    private static final double DECIMAL_ROUND = 10.0;
 
     @Getter
     @Setter

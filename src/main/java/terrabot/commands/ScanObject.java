@@ -6,7 +6,7 @@ import fileio.CommandInput;
 import terrabot.TerraBot;
 import terrabot.entities.Position;
 import terrabot.map.Cell;
-import terrabot.map.Map;
+import terrabot.map.SimMap;
 
 public final class ScanObject {
     private static final ObjectMapper MAPPER = new ObjectMapper();
@@ -17,11 +17,12 @@ public final class ScanObject {
     /**
      * Creates a JSON object describing the scanned object on the current cell
      * @param robot the TerraBot whose current position is inspected
-     * @param map the map containing all territory cells
+     * @param simMap the map containing all territory cells
      * @param cmd the current command
      * @return an ObjectNode containing info about the scanned object
      */
-    public static ObjectNode scan(final TerraBot robot, final Map map, final CommandInput cmd) {
+    public static ObjectNode scan(final TerraBot robot,
+                                  final SimMap simMap, final CommandInput cmd) {
 
         String color = cmd.getColor();
         String smell = cmd.getSmell();
@@ -31,8 +32,14 @@ public final class ScanObject {
         boolean hasSound = !sound.equals("none");
 
         Position pos = robot.getPosition();
-        Cell cell = map.getCell(pos.getX(), pos.getY());
+        Cell cell = simMap.getCell(pos.getX(), pos.getY());
         ObjectNode result = MAPPER.createObjectNode();
+
+        if (robot.getEnergyStatus() < ENERGY_REQUIRED) {
+            ObjectNode errorNode = MAPPER.createObjectNode();
+            errorNode.put("message", "ERROR: Not enough energy to perform action");
+            return errorNode;
+        }
 
         if (!hasColor && !hasSmell && !hasSound) {
             if (cell.getWater() != null) {
@@ -40,6 +47,7 @@ public final class ScanObject {
                 cell.getWater().setScanned(true);
                 robot.setEnergyStatus(robot.getEnergyStatus() - ENERGY_REQUIRED);
                 cell.getWater().setScannedTimestamp(cmd.getTimestamp());
+                robot.addToInventory(cell.getWater().getName());
             } else {
                 result.put("message", "ERROR: Object not found. Cannot perform action");
             }
@@ -52,6 +60,7 @@ public final class ScanObject {
                 cell.getPlant().setScanned(true);
                 robot.setEnergyStatus(robot.getEnergyStatus() - ENERGY_REQUIRED);
                 cell.getPlant().setScannedTimestamp(cmd.getTimestamp());
+                robot.addToInventory(cell.getPlant().getName());
             } else {
                 result.put("message", "ERROR: Object not found. Cannot perform action");
             }
@@ -64,6 +73,7 @@ public final class ScanObject {
                 cell.getAnimal().setScanned(true);
                 robot.setEnergyStatus(robot.getEnergyStatus() - ENERGY_REQUIRED);
                 cell.getAnimal().setScannedTimestamp(cmd.getTimestamp());
+                robot.addToInventory(cell.getAnimal().getName());
             } else {
                 result.put("message", "ERROR: Object not found. Cannot perform action");
             }

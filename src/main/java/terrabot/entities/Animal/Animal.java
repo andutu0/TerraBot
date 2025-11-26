@@ -11,12 +11,18 @@ public abstract class Animal extends Entity {
     @Getter @Setter
     private String animalStatus;
     @Getter @Setter
-    private double pendingFertilizer;
+    private boolean pendingFertilizer;
+    @Getter @Setter
+    private String lastAte;
+    @Getter @Setter
+    private int lastProcessedTime = -1;
 
     public Animal(final AnimalInput input) {
         super(input.getName(), input.getMass());
         type = input.getType();
         animalStatus = "Hungry";
+        pendingFertilizer = false;
+        lastAte = "none";
     }
 
     /**

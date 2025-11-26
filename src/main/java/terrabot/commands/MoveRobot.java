@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import terrabot.TerraBot;
 import terrabot.entities.Position;
 import terrabot.map.Cell;
-import terrabot.map.Map;
+import terrabot.map.SimMap;
 
 import java.util.function.Function;
 
@@ -20,23 +20,24 @@ public final class MoveRobot {
      * and returns a JSON node containing the move message.
      *
      * @param robot the TerraBot instance
-     * @param map   the simulation map
+     * @param simMap   the simulation map
      * @return ObjectNode with "message" field
      */
-    public static ObjectNode move(final TerraBot robot, final Map map) {
+    public static ObjectNode move(final TerraBot robot, final SimMap simMap) {
 
         final Position currPos = robot.getPosition();
         final int x = currPos.getX();
         final int y = currPos.getY();
 
-        final int width = map.getColumns();
-        final int height = map.getRows();
+        final int width = simMap.getColumns();
+        final int height = simMap.getRows();
 
         int bestScore = Integer.MAX_VALUE;
         int bestX = x;
         int bestY = y;
         boolean wasPossibleToMove = false;
 
+        // lambda to compute the cost of moving to a specific cell
         Function<Cell, Integer> score = cell -> {
             double tempScore = 0.0;
             int count = 0;
@@ -65,8 +66,8 @@ public final class MoveRobot {
         };
 
         if (y + 1 < height) {
-            Cell down = map.getCell(x, y + 1);
-            int s = score.apply(down);
+            Cell up = simMap.getCell(x, y + 1);
+            int s = score.apply(up);
             if (s < bestScore && s <= robot.getEnergyStatus()) {
                 bestScore = s;
                 bestX = x;
@@ -76,7 +77,7 @@ public final class MoveRobot {
         }
 
         if (x + 1 < width) {
-            Cell right = map.getCell(x + 1, y);
+            Cell right = simMap.getCell(x + 1, y);
             int s = score.apply(right);
             if (s < bestScore && s <= robot.getEnergyStatus()) {
                 bestScore = s;
@@ -87,8 +88,8 @@ public final class MoveRobot {
         }
 
         if (y - 1 >= 0) {
-            Cell up = map.getCell(x, y - 1);
-            int s = score.apply(up);
+            Cell down = simMap.getCell(x, y - 1);
+            int s = score.apply(down);
             if (s < bestScore && s <= robot.getEnergyStatus()) {
                 bestScore = s;
                 bestX = x;
@@ -98,7 +99,7 @@ public final class MoveRobot {
         }
 
         if (x - 1 >= 0) {
-            Cell left = map.getCell(x - 1, y);
+            Cell left = simMap.getCell(x - 1, y);
             int s = score.apply(left);
             if (s < bestScore && s <= robot.getEnergyStatus()) {
                 bestScore = s;
@@ -113,7 +114,8 @@ public final class MoveRobot {
             robot.setEnergyStatus(robot.getEnergyStatus() - bestScore);
             ObjectNode res = MAPPER.createObjectNode();
             res.put("message",
-                    "The robot has successfully moved to position (" + bestX + ", " + bestY + ").");
+                    "The robot has successfully moved to position ("
+                            + bestX + ", " + bestY + ").");
 
             return res;
         } else {

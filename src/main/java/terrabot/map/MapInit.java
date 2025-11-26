@@ -31,11 +31,11 @@ public final class MapInit {
      * @param sim the simulation input containing territory configuration
      * @return a fully initialized Map object with all entities placed
      */
-    public static Map build(final SimulationInput sim) {
+    public static SimMap build(final SimulationInput sim) {
         String[] parts = sim.getTerritoryDim().split("x");
         int rows = Integer.parseInt(parts[0]);
         int cols = Integer.parseInt(parts[1]);
-        Map world = new Map(rows, cols);
+        SimMap world = new SimMap(rows, cols);
 
         TerritorySectionParamsInput territory = sim.getTerritorySectionParams();
 

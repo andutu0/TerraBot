@@ -24,6 +24,7 @@ public final class DesertSoil extends Soil {
     @Override
     public double computeStuckChance() {
         return ((MAX - getWaterRetention() + salinity) / MAX * MAX);
+
     }
 
     @Override
@@ -36,6 +37,6 @@ public final class DesertSoil extends Soil {
 
     @Override
     public void addSpecificFields(final ObjectNode node) {
-        node.put("salinity", this.getSalinity());
+        node.put("salinity", salinity);
     }
 }

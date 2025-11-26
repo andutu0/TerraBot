@@ -11,7 +11,6 @@ public final class TropicalAir extends Air {
     private static final double HUMIDITY_MULTIPLIER = 0.5;
     private static final double CO2_MULTIPLIER = 0.01;
     private static final double MAX = 100.0;
-    private static final double TOXICITY_MULTIPLIER = 100.0;
     private static final double MAX_SCORE = 82.0;
     private static final double RAINFALL_MULTIPLIER = 0.3;
     private static final double TOXICITY_SCORE_MULTIPLIER = 0.8;
@@ -45,16 +44,7 @@ public final class TropicalAir extends Air {
 
     @Override
     public double computeToxicity() {
-        computeAirQuality();
-        double aq = getAirQuality();
-        double toxicity = TOXICITY_MULTIPLIER * (1 - aq / MAX_SCORE);
-        // 100 is not a magic number intellij, its literally %
-        toxicity = Math.max(toxicity, 0);
-        toxicity = Math.round((toxicity) * MAX) / MAX;
-        if (toxicity > MAX_SCORE * TOXICITY_SCORE_MULTIPLIER) {
-            this.setToxic(true);
-        }
-        return toxicity;
+        return finalizeToxicity(MAX_SCORE, TOXICITY_SCORE_MULTIPLIER);
     }
 
     @Override

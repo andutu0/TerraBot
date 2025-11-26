@@ -44,6 +44,6 @@ public final class ForestSoil extends Soil {
 
     @Override
     public void addSpecificFields(final ObjectNode node) {
-        node.put("leafLitter", this.getLeafLitter());
+        node.put("leafLitter", leafLitter);
     }
 }

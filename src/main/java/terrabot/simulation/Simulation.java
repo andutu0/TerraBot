@@ -8,15 +8,18 @@ import fileio.SimulationInput;
 import lombok.Getter;
 import lombok.Setter;
 import terrabot.commands.ChangeWeatherConditions;
+import terrabot.commands.ImproveEnvironment;
+import terrabot.commands.LearnFact;
 import terrabot.commands.MapOutput;
 import terrabot.commands.MoveRobot;
-import terrabot.commands.ScanObject;
 import terrabot.commands.PrintEnvConditions;
+import terrabot.commands.PrintKnowledgeBase;
+import terrabot.commands.ScanObject;
 import terrabot.entities.Air.Air;
 import terrabot.entities.Interactions;
 import terrabot.entities.Position;
 import terrabot.map.Cell;
-import terrabot.map.Map;
+import terrabot.map.SimMap;
 import terrabot.map.MapInit;
 import terrabot.TerraBot;
 
@@ -34,7 +37,7 @@ public final class Simulation {
     private int currTime = 0;
 
     @Getter
-    private final Map map;
+    private final SimMap simMap;
     @Getter
     private final TerraBot robot;
     private boolean started = false;
@@ -44,7 +47,7 @@ public final class Simulation {
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
     public Simulation(final SimulationInput simulationInput) {
-        this.map = MapInit.build(simulationInput);
+        this.simMap = MapInit.build(simulationInput);
         this.robot = new TerraBot(new Position(0, 0), simulationInput.getEnergyPoints());
     }
 
@@ -58,6 +61,13 @@ public final class Simulation {
         ObjectNode node = MAPPER.createObjectNode();
         node.put("command", cmd.getCommand());
         maybeRevertWeather(cmd.getTimestamp());
+
+        if (started) {
+            ++currTime;
+            Interactions.interact(simMap, this);
+        }
+
+        advanceEnvironment(cmd.getTimestamp());
 
         if (charging && cmd.getTimestamp() < chargeUntil) {
             node.put("message", "ERROR: Robot still charging. Cannot perform action");
@@ -86,7 +96,7 @@ public final class Simulation {
                     if (!started) {
                         node.put("message", "ERROR: Simulation not started. Cannot perform action");
                     } else {
-                        ObjectNode output = PrintEnvConditions.build(map, robot, this);
+                        ObjectNode output = PrintEnvConditions.build(simMap, robot, this);
                         node.set("output", output);
                     }
                 }
@@ -94,7 +104,7 @@ public final class Simulation {
                     if (!started) {
                         node.put("message", "ERROR: Simulation not started. Cannot perform action");
                     } else {
-                        ArrayNode output = MapOutput.build(map, this);
+                        ArrayNode output = MapOutput.build(simMap, this);
                         node.set("output", output);
                     }
                 }
@@ -102,7 +112,7 @@ public final class Simulation {
                     if (!started) {
                         node.put("message", "ERROR: Simulation not started. Cannot perform action");
                     } else {
-                        ObjectNode moveNode = MoveRobot.move(robot, map);
+                        ObjectNode moveNode = MoveRobot.move(robot, simMap);
                         node.put("message", moveNode.get("message").asText());
                     }
                 }
@@ -129,12 +139,12 @@ public final class Simulation {
                     if (!started) {
                         node.put("message", "ERROR: Simulation not started. Cannot perform action");
                     } else {
-                        boolean changed = ChangeWeatherConditions.apply(cmd, map, this);
+                        boolean changed = ChangeWeatherConditions.apply(cmd, simMap, this);
                         if (changed) {
                             node.put("message", "The weather has changed.");
                         } else {
                             node.put("message",
-                                    "ERROR: The weather change does not affect the environment."
+                                    "ERROR: The weather change does not affect the environment. "
                                             + "Cannot perform action");
                         }
                     }
@@ -143,18 +153,38 @@ public final class Simulation {
                     if (!started) {
                         node.put("message", "ERROR: Simulation not started. Cannot perform action");
                     } else {
-                        ObjectNode scanNode = ScanObject.scan(robot, map, cmd);
+                        ObjectNode scanNode = ScanObject.scan(robot, simMap, cmd);
                         node.put("message", scanNode.get("message").asText());
+                    }
+                }
+                case "learnFact" -> {
+                    if (!started) {
+                        node.put("message", "ERROR: Simulation not started. Cannot perform action");
+                    } else {
+                        ObjectNode scanNode = LearnFact.learn(robot, cmd);
+                        node.put("message", scanNode.get("message").asText());
+                    }
+                }
+                case "printKnowledgeBase" -> {
+                    if (!started) {
+                        node.put("message", "ERROR: Simulation not started. Cannot perform action");
+                    } else {
+                        ArrayNode output = PrintKnowledgeBase.build(robot);
+                        node.set("output", output);
+                    }
+                }
+                case "improveEnvironment" -> {
+                    if (!started) {
+                        node.put("message", "ERROR: Simulation not started. Cannot perform action");
+                    } else {
+                        ObjectNode improveNode = ImproveEnvironment.improve(robot, simMap, cmd);
+                        node.put("message", improveNode.get("message").asText());
                     }
                 }
                 default -> {
                     node.put("message", "ERROR: Unknown command");
                 }
             }
-        }
-        if (started) {
-            ++currTime;
-            Interactions.interact(map, this);
         }
 
         node.put("timestamp", cmd.getTimestamp());
@@ -176,14 +206,16 @@ public final class Simulation {
         return "poor";
     }
 
+    // checks if the 2 timestamp weather duration passed or not
+    // if it passed reverts the weather effects on the map
     private void maybeRevertWeather(final int currentTimestamp) {
         if (!weatherActive || currentTimestamp < weatherRevertAt) {
             return;
         }
 
-        for (int y = 0; y < map.getRows(); y++) {
-            for (int x = 0; x < map.getColumns(); x++) {
-                Cell cell = map.getCell(x, y);
+        for (int y = 0; y < simMap.getRows(); y++) {
+            for (int x = 0; x < simMap.getColumns(); x++) {
+                Cell cell = simMap.getCell(x, y);
                 Air air = cell.getAir();
                 if (air == null) {
                     continue;
@@ -217,5 +249,19 @@ public final class Simulation {
         };
     }
 
-
+    // if the commands are not in consecutive timestamps,
+    // we still need to do the interactions for the time in between
+    private void advanceEnvironment(final int targetTimestamp) {
+        if (!started) {
+            currTime = targetTimestamp;
+            return;
+        }
+        if (targetTimestamp <= currTime) {
+            return;
+        }
+        for (int time = currTime; time < targetTimestamp; time++) {
+            Interactions.interact(simMap, this);
+        }
+        currTime = targetTimestamp;
+    }
 }

@@ -38,6 +38,6 @@ public final class SwampSoil extends Soil {
 
     @Override
     public void addSpecificFields(final ObjectNode node) {
-        node.put("waterLogging", this.getWaterLogging());
+        node.put("waterLogging", waterLogging);
     }
 }

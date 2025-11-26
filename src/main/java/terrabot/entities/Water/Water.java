@@ -4,10 +4,10 @@ import fileio.WaterInput;
 import lombok.Getter;
 import lombok.Setter;
 import terrabot.entities.Entity;
-
 import static java.lang.Math.abs;
 
-// fara subclase pentru ca nu folosim tipurile la nimic
+// water doesn't have any specific behavior based on its type
+// so no need for subclasses
 
 public final class Water extends Entity {
     private static final double PERCENT_DIV = 100.0;
@@ -49,7 +49,6 @@ public final class Water extends Entity {
         this.type = input.getType();
     }
 
-    // 1 == Poor, 2 == Moderate, 3 == Good
     /**
      * Computes the water quality.
      *
@@ -59,15 +58,7 @@ public final class Water extends Entity {
         double purityScore        = purity / PERCENT_DIV;
         double pHScore            = 1 - abs(pH - SEVEN_P_FIVE_DIV) / SEVEN_P_FIVE_DIV;
         double salinityScore        = 1 - (salinity / SALINITY_DIV);
-        double turbidityScore      = 1 - (turbidity / PERCENT_DIV);
-        double contaminantScore     = 1 - (contaminantIndex / PERCENT_DIV);
-        double frozenScore          = isFrozen ? 0 : 1;
-
-        double waterQuality = (FOURTH_MULTIPLIER * purityScore + THIRD_MULTIPLIER * pHScore
-                        + SECOND_MULTIPLIER * salinityScore
-                        + FIRST_MULTIPLIER * turbidityScore
-                        + SECOND_MULTIPLIER * contaminantScore
-                        + THIRD_MULTIPLIER * frozenScore) * PERCENT_DIV;
+        double waterQuality = getWaterQuality(purityScore, pHScore, salinityScore);
 
         if (waterQuality >= GOOD_BENCHMARK) {
             return GOOD_ID;
@@ -76,5 +67,19 @@ public final class Water extends Entity {
         } else {
             return BAD_ID;
         }
+    }
+
+    private double getWaterQuality(final double purityScore,
+                                   final double pHScore,
+                                   final double salinityScore) {
+        double turbidityScore      = 1 - (turbidity / PERCENT_DIV);
+        double contaminantScore     = 1 - (contaminantIndex / PERCENT_DIV);
+        double frozenScore          = isFrozen ? 0 : 1;
+
+        return (FOURTH_MULTIPLIER * purityScore + THIRD_MULTIPLIER * pHScore
+                        + SECOND_MULTIPLIER * salinityScore
+                        + FIRST_MULTIPLIER * turbidityScore
+                        + SECOND_MULTIPLIER * contaminantScore
+                        + THIRD_MULTIPLIER * frozenScore) * PERCENT_DIV;
     }
 }

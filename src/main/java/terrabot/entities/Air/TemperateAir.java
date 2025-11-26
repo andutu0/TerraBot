@@ -10,8 +10,6 @@ public final class TemperateAir extends Air {
     private static final double OXYGEN_MULTIPLIER = 2.0;
     private static final double HUMIDITY_MULTIPLIER = 0.7;
     private static final double POLLEN_MULTIPLIER = 0.1;
-    private static final double MAX = 100.0;
-    private static final double TOXICITY_MULTIPLIER = 100.0;
     private static final double MAX_SCORE = 84.0;
     private static final double QUAL_REDUCTION = 15;
     private static final double TOXICITY_SCORE_MULTIPLIER = 0.8;
@@ -38,23 +36,14 @@ public final class TemperateAir extends Air {
                 + (getHumidity() * HUMIDITY_MULTIPLIER)
                 - (pollenLevel * POLLEN_MULTIPLIER);
         double quality = normalize(score);
-        setAirQuality(quality);
+        setAirQuality(score);
         affectedAirQuality = false;
         return quality;
     }
 
     @Override
     public double computeToxicity() {
-        computeAirQuality();
-        double aq = getAirQuality();
-        double toxicity = TOXICITY_MULTIPLIER * (1 - aq / MAX_SCORE);
-        // 100 is not a magic number intellij, its literally %
-        toxicity = Math.max(toxicity, 0);
-        toxicity = Math.round((toxicity) * MAX) / MAX;
-        if (toxicity > MAX_SCORE * TOXICITY_SCORE_MULTIPLIER) {
-            this.setToxic(true);
-        }
-        return toxicity;
+        return finalizeToxicity(MAX_SCORE, TOXICITY_SCORE_MULTIPLIER);
     }
 
     @Override

@@ -10,7 +10,7 @@ import terrabot.entities.Animal.Animal;
 import terrabot.entities.Water.Water;
 import terrabot.entities.Position;
 import terrabot.map.Cell;
-import terrabot.map.Map;
+import terrabot.map.SimMap;
 import terrabot.simulation.Simulation;
 
 public final class PrintEnvConditions {
@@ -21,15 +21,15 @@ public final class PrintEnvConditions {
     /**
      * Creates a JSON object describing the environmental conditions of the
      * current cell.
-     * @param map the map containing all territory cells
+     * @param simMap the map containing all territory cells
      * @param bot the TerraBot whose current position is inspected
      * @return an ObjectNode containing all environment fields for that cell
      */
-    public static ObjectNode build(final Map map, final TerraBot bot, final Simulation sim) {
+    public static ObjectNode build(final SimMap simMap, final TerraBot bot, final Simulation sim) {
         ObjectNode out = MAPPER.createObjectNode();
 
         Position pos = bot.getPosition();
-        Cell cell = map.getCell(pos.getX(), pos.getY());
+        Cell cell = simMap.getCell(pos.getX(), pos.getY());
 
         Soil soil = cell.getSoil();
         if (soil != null) {

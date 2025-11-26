@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import terrabot.entities.Air.Air;
 import terrabot.entities.Soil.Soil;
 import terrabot.map.Cell;
-import terrabot.map.Map;
+import terrabot.map.SimMap;
 import terrabot.simulation.Simulation;
 
 public final class MapOutput {
@@ -16,19 +16,19 @@ public final class MapOutput {
 
     /**
      * Builds the JSON array describing the state of the entire map.
-     * @param map the map containing all cells of the territory;
+     * @param simMap the map containing all cells of the territory;
      * @param sim the active simulation providing the quality evaluation logic;
      * @return an ArrayNode representing the final JSON structure required
      */
-    public static ArrayNode build(final Map map, final Simulation sim) {
+    public static ArrayNode build(final SimMap simMap, final Simulation sim) {
         ArrayNode arr = MAPPER.createArrayNode();
 
-        int width = map.getColumns();
-        int height = map.getRows();
+        int width = simMap.getColumns();
+        int height = simMap.getRows();
 
         for (int y = 0; y < height; ++y) {
             for (int x = 0; x < width; ++x) {
-                Cell cell = map.getCell(x, y);
+                Cell cell = simMap.getCell(x, y);
 
                 ObjectNode cellNode = MAPPER.createObjectNode();
 

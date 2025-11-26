@@ -10,8 +10,6 @@ public final class DesertAir extends Air {
     private static final double OXYGEN_MULTIPLIER = 2.0;
     private static final double DUST_MULTIPLIER = 0.2;
     private static final double TEMP_MULTIPLIER = 0.3;
-    private static final double MAX = 100.0;
-    private static final double TOXICITY_MULTIPLIER = 100.0;
     private static final double MAX_SCORE = 65.0;
     private static final double STORM_SCORE = 30;
     private static final double TOXICITY_SCORE_MULTIPLIER = 0.8;
@@ -37,23 +35,14 @@ public final class DesertAir extends Air {
                 - (dustParticles * DUST_MULTIPLIER)
                 - (getTemperature() * TEMP_MULTIPLIER);
         double quality = normalize(score);
-        setAirQuality(quality);
+        setAirQuality(score);
         affectedAirQuality = false;
         return quality;
     }
 
     @Override
     public double computeToxicity() {
-        computeAirQuality();
-        double aq = getAirQuality();
-        double toxicity = TOXICITY_MULTIPLIER * (1 - aq / MAX_SCORE);
-        // 100 is not a magic number intellij, its literally %
-        toxicity = Math.max(toxicity, 0);
-        toxicity = Math.round((toxicity) * MAX) / MAX;
-        if (toxicity > MAX_SCORE * TOXICITY_SCORE_MULTIPLIER) {
-            this.setToxic(true);
-        }
-        return toxicity;
+        return finalizeToxicity(MAX_SCORE, TOXICITY_SCORE_MULTIPLIER);
     }
 
     @Override

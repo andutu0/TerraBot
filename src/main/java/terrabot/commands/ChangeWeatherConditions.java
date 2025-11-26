@@ -3,7 +3,7 @@ package terrabot.commands;
 import fileio.CommandInput;
 import terrabot.entities.Air.Air;
 import terrabot.map.Cell;
-import terrabot.map.Map;
+import terrabot.map.SimMap;
 import terrabot.simulation.Simulation;
 
 public final class ChangeWeatherConditions {
@@ -15,17 +15,17 @@ public final class ChangeWeatherConditions {
     /**
      * Updates the air quality based on current weather
      * @param cmd the current weather change command
-     * @param map the current map
+     * @param simMap the current map
      * @param sim the active simulation
      * @return boolean that specifies is changes were applied on any cell
      */
-    public static boolean apply(final CommandInput cmd, final Map map, final Simulation sim) {
+    public static boolean apply(final CommandInput cmd, final SimMap simMap, final Simulation sim) {
         String weatherType = cmd.getType();
         boolean anyAffected = false;
 
-        for (int y = 0; y < map.getRows(); y++) {
-            for (int x = 0; x < map.getColumns(); x++) {
-                Cell cell = map.getCell(x, y);
+        for (int y = 0; y < simMap.getRows(); y++) {
+            for (int x = 0; x < simMap.getColumns(); x++) {
+                Cell cell = simMap.getCell(x, y);
                 Air air = cell.getAir();
                 if (air == null) {
                     continue;
@@ -35,10 +35,9 @@ public final class ChangeWeatherConditions {
                     continue;
                 }
                 anyAffected = true;
+                // we check for the type of weather and apply the corresponding changes
+                // desert storm acts as the default branch, so i removed it
                 switch (weatherType) {
-                    case "desertStorm":
-                        air.computeWeatherChange(null);
-                        break;
                     case "peopleHiking":
                         air.computeWeatherChange((double) cmd.getNumberOfHikers());
                         break;

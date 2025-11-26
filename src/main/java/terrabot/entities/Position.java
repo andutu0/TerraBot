@@ -1,5 +1,9 @@
 package terrabot.entities;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter @Setter
 public final class Position {
     private static final int HASH_MULTIPLIER = 31;
     private int x;
@@ -7,20 +11,6 @@ public final class Position {
 
     public Position(final int x, final int y) {
         this.x = x;
-        this.y = y;
-    }
-
-    public int getX() {
-        return x;
-    }
-    public int getY() {
-        return y;
-    }
-
-    public void setX(final int x) {
-        this.x = x;
-    }
-    public void setY(final int y) {
         this.y = y;
     }
 

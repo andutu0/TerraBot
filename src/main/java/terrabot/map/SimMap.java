@@ -3,7 +3,7 @@ package terrabot.map;
 import lombok.Getter;
 import lombok.Setter;
 
-public final class Map {
+public final class SimMap {
     @Getter
     private final int rows;
     @Getter
@@ -12,7 +12,7 @@ public final class Map {
     @Setter
     private Cell[][] map;
 
-    public Map(final int rows, final int columns) {
+    public SimMap(final int rows, final int columns) {
         this.rows = rows;
         this.columns = columns;
         this.map = new Cell[rows][columns];
