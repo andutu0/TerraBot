@@ -34,34 +34,6 @@ public final class TerraBot {
     }
 
     /**
-     * Removes an entity from the inventory.
-     * @param entityName the name of the entity to remove
-     * @return true if successful, false if entity is not found
-     */
-    public boolean removeFromInventory(final String entityName) {
-        if (!inventory.containsKey(entityName)) {
-            return false;
-        }
-
-        int count = inventory.get(entityName);
-        if (count > 1) {
-            inventory.put(entityName, count - 1);
-        } else {
-            inventory.remove(entityName);
-        }
-        return true;
-    }
-
-    /**
-     * Checks if inventory contains a specific entity.
-     * @param entityName the entity name to check
-     * @return true if entity exists in inventory, false otherwise
-     */
-    public boolean hasInInventory(final String entityName) {
-        return inventory.containsKey(entityName);
-    }
-
-    /**
      * Adds a fact to the knowledge base.
      * @param name the component name
      * @param fact the fact to add
