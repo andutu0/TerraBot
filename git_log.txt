@@ -1,0 +1,289 @@
+commit c15d6be7fa96cc565e66668c080563a916db26d6
+Author: Andrei Lungu <andu.lng05@gmail.com>
+Date:   Sat Nov 29 18:59:18 2025 +0200
+
+    Solve test 21 and fix styling
+    
+    Signed-off-by: Andrei Lungu <andu.lng05@gmail.com>
+
+commit 0c380b363fd374221fa39a075c8619544561e459
+Author: Andrei Lungu <andu.lng05@gmail.com>
+Date:   Wed Nov 26 17:08:12 2025 +0200
+
+    Remove unused functions
+    
+    Signed-off-by: Andrei Lungu <andu.lng05@gmail.com>
+
+commit fe2702187e6d3d4d0526d6a26a9a804ed3b09d75
+Author: Andrei Lungu <andu.lng05@gmail.com>
+Date:   Wed Nov 26 11:49:55 2025 +0200
+
+    Fix animal eat and move + fix style issues
+    
+    Signed-off-by: Andrei Lungu <andu.lng05@gmail.com>
+
+commit e0213a3d38547676091dd555dd5b9f3641676501
+Author: Andrei Lungu <andu.lng05@gmail.com>
+Date:   Mon Nov 24 15:38:42 2025 +0200
+
+    Remove prints used for debugging
+    
+    Signed-off-by: Andrei Lungu <andu.lng05@gmail.com>
+
+commit fbc34285ee7435778714ae6826935f53820e0c43
+Author: Andrei Lungu <andu.lng05@gmail.com>
+Date:   Mon Nov 24 15:35:48 2025 +0200
+
+    Add moveAnimal, need to add animal interactions
+    
+    Signed-off-by: Andrei Lungu <andu.lng05@gmail.com>
+
+commit f182e0ee2c312000258d8c439dc4c73eadccb8d2
+Author: Andrei Lungu <andu.lng05@gmail.com>
+Date:   Mon Nov 24 12:35:24 2025 +0200
+
+    Add scanObject functionality
+    
+    Signed-off-by: Andrei Lungu <andu.lng05@gmail.com>
+
+commit 0838256ff795e9f0263617ab2bb6d3052411e2f0
+Author: Andrei Lungu <andu.lng05@gmail.com>
+Date:   Sat Nov 22 15:58:11 2025 +0200
+
+    Implement weather changes
+    
+    Signed-off-by: Andrei Lungu <andu.lng05@gmail.com>
+
+commit 6919824d1264c8b45ff7c8f4053c7998f2d8ec61
+Author: Andrei Lungu <andu.lng05@gmail.com>
+Date:   Sat Nov 22 14:34:48 2025 +0200
+
+    Implement recharging
+    
+    Signed-off-by: Andrei Lungu <andu.lng05@gmail.com>
+
+commit de53bd296598ebd8a07eb970239b3b85d3d412b3
+Author: Andrei Lungu <andu.lng05@gmail.com>
+Date:   Sat Nov 22 14:12:00 2025 +0200
+
+    Correct coding style and add moveRobot
+    
+    Signed-off-by: Andrei Lungu <andu.lng05@gmail.com>
+
+commit aaeeb4e15d1cec1e26e2bf1973c64eac986f2a70
+Author: Andrei Lungu <andu.lng05@gmail.com>
+Date:   Sat Nov 22 11:51:54 2025 +0200
+
+    Implemented minimal classes for passing the first 2 tests
+    
+    Signed-off-by: Andrei Lungu <andu.lng05@gmail.com>
+
+commit 8931a34e94a0da3198fde12a6d81d593b10cab9e
+Author: David Capragiu <63539529+Dievaid@users.noreply.github.com>
+Date:   Sat Nov 15 23:14:00 2025 +0200
+
+    Patch checker for local runtime (#15)
+
+commit 3c952a4a20f5a2a00ba98e158ce4bb71d66c4911
+Merge: eeaa3c4 b15db4d
+Author: alina-t-872 <69516563+alina-t-872@users.noreply.github.com>
+Date:   Thu Nov 13 20:16:07 2025 +0200
+
+    Merge pull request #14 from oop-pub/update_refs
+    
+    Merge update_refs into main
+
+commit b15db4d73804a5e200ea5cd1a61ed5b4a0bf3108
+Author: alina-t-872 <alina.tudorache872@gmail.com>
+Date:   Wed Nov 12 23:40:10 2025 +0200
+
+    Update refs for t8,19, 21 - update changeWeather
+
+commit eeaa3c4cae3b60696eee8ccbcd733bc868544a52
+Merge: dbf8219 f6ea06a
+Author: alina-t-872 <69516563+alina-t-872@users.noreply.github.com>
+Date:   Wed Nov 12 00:26:49 2025 +0200
+
+    Merge pull request #13 from oop-pub/update_refs
+    
+    Merge update_refs into main - new t19 + ref t8,19
+
+commit f6ea06aff4b786fd0e2389a988f3214d1a215bd8
+Author: alina-t-872 <alina.tudorache872@gmail.com>
+Date:   Wed Nov 12 00:17:59 2025 +0200
+
+    Update t19 and ref for t8,19
+
+commit dbf8219796ad31ece32967ab6d198b5453296207
+Merge: 1b94021 7b20eac
+Author: alina-t-872 <69516563+alina-t-872@users.noreply.github.com>
+Date:   Mon Nov 10 10:55:44 2025 +0200
+
+    Merge pull request #12 from oop-pub/update_refs
+    
+    Merge update_refs into main - update t20,21 and ref for t20
+
+commit 7b20eaced31dcc97f2b2e78844c27f1909534989
+Author: alina-t-872 <alina.tudorache872@gmail.com>
+Date:   Mon Nov 10 10:47:12 2025 +0200
+
+    Update t20,21 and ref for t20
+
+commit 1b940213b2369a4aea6156caeaf07a585eb9e50c
+Merge: 877d6fa 051d3ab
+Author: alina-t-872 <69516563+alina-t-872@users.noreply.github.com>
+Date:   Sun Nov 9 16:54:15 2025 +0200
+
+    Merge pull request #11 from oop-pub/update_refs - fixed remove plant
+    
+    Updated refs for t15, t19-21 and fixed remove plant
+
+commit 051d3ab936ce152fc90a56f515fad98ff2d834c1
+Author: alina-t-872 <alina.tudorache872@gmail.com>
+Date:   Sun Nov 9 13:09:44 2025 +0200
+
+    Update refs t15,19-21 - fixed remove plant
+
+commit 877d6fa2fd66ab8214602c63662fd20b6148db19
+Author: David Capragiu <63539529+Dievaid@users.noreply.github.com>
+Date:   Sat Nov 8 22:10:32 2025 +0200
+
+    adjusted git test and PASS text into "PASSED" (#10)
+    
+    Co-authored-by: dievaid <david.capragiu@gmail.com>
+
+commit cc0ac7b421df6136a0f272643e41eea615513a5e
+Author: alina-t-872 <69516563+alina-t-872@users.noreply.github.com>
+Date:   Sat Nov 8 19:13:20 2025 +0200
+
+    Fixed skel errors (#9)
+
+commit f1132d531a254d101f8fa9f11d7ed0d812061551
+Author: alina-t-872 <alina.tudorache872@gmail.com>
+Date:   Fri Nov 7 16:25:33 2025 +0200
+
+    Fixed skel errors
+
+commit 8520ba377f2d849fc72887d6f92876ac7dc4555a
+Author: David Capragiu <63539529+Dievaid@users.noreply.github.com>
+Date:   Thu Nov 6 16:55:59 2025 +0200
+
+    Patch checkstyle for skeleton (#8)
+
+commit 7ee2588d7381d0eeb4e53c5ca5ca62dc6701aa80
+Merge: e592c0b 51ef79a
+Author: alina-t-872 <69516563+alina-t-872@users.noreply.github.com>
+Date:   Wed Nov 5 00:07:11 2025 +0200
+
+    Merge pull request #7 from oop-pub/update_refs
+    
+    Merge update_refs into main - complex tests
+
+commit 51ef79a8ed1b78091f49c5c87ade744fa9f7f440
+Author: alina-t-872 <alina.tudorache872@gmail.com>
+Date:   Tue Nov 4 23:22:04 2025 +0200
+
+    Added complex tests t19-21
+
+commit e592c0b1e663e86c34a6bfe8a9f2a6889a946b10
+Merge: 606c553 19df0ab
+Author: alina-t-872 <69516563+alina-t-872@users.noreply.github.com>
+Date:   Tue Nov 4 20:34:21 2025 +0200
+
+    Merge pull request #6 from oop-pub/update_refs - new complex tests
+    
+    Merge update_refs into main
+
+commit 19df0ab993fbd0e0df37a1c6e0f843d733a0071b
+Merge: 9afd483 b5c3117
+Author: alina-t-872 <alina.tudorache872@gmail.com>
+Date:   Tue Nov 4 15:14:07 2025 +0200
+
+    Merge remote-tracking branch 'origin/update_refs' into update_refs
+
+commit 9afd4833e8bedd83b98a84e981ccb3381df51e4b
+Author: alina-t-872 <alina.tudorache872@gmail.com>
+Date:   Tue Nov 4 15:13:30 2025 +0200
+
+    Updated tests and refs, fixed turbidity field in WaterInput
+
+commit 606c55354e43af50f2051f3ce207cfbe0528b6ac
+Merge: f32bc8f c21c202
+Author: alina-t-872 <69516563+alina-t-872@users.noreply.github.com>
+Date:   Wed Oct 29 23:00:47 2025 +0200
+
+    Merge pull request #5 from oop-pub/patch/ignore-fileio
+    
+    Patch source file collector to ignore fileio
+
+commit c21c2020ae06f48569ca02fa01b82320d23faed4
+Author: dievaid <david.capragiu@gmail.com>
+Date:   Wed Oct 29 22:49:08 2025 +0200
+
+    Patch source file collector to ignore fileio
+
+commit f32bc8ff9b0bf737060887ae8c8ec8f2211763c9
+Merge: a33e594 b5c3117
+Author: alina-t-872 <69516563+alina-t-872@users.noreply.github.com>
+Date:   Wed Oct 29 00:43:58 2025 +0200
+
+    Merge pull request #4 from oop-pub/update_refs
+    
+    Merge update_refs into main
+
+commit b5c311736b6c5c2a6e9f691bd00634cad22a6039
+Merge: 98b851e a33e594
+Author: alina-t-872 <69516563+alina-t-872@users.noreply.github.com>
+Date:   Wed Oct 29 00:43:38 2025 +0200
+
+    Merge branch 'main' into update_refs
+
+commit 98b851e4c52c83866cea1eebd8a486fb855c2b43
+Author: alina-t-872 <alina.tudorache872@gmail.com>
+Date:   Wed Oct 29 00:41:24 2025 +0200
+
+    Updated ref for t8,t10 and t11
+
+commit a33e5944d10c2e9ba069a483d8e1d46e35c2ff00
+Merge: 0fb58fb 801f120
+Author: alina-t-872 <69516563+alina-t-872@users.noreply.github.com>
+Date:   Tue Oct 28 07:31:01 2025 +0200
+
+    Merge pull request #3 from oop-pub/update_t8
+    
+    Merge update_t8 into main
+
+commit 801f1204fc0b14a0424994782931768a8902d8f4
+Author: alina-t-872 <alina.tudorache872@gmail.com>
+Date:   Tue Oct 28 07:29:46 2025 +0200
+
+    Updated t8 and ref
+
+commit 0fb58fb996efecebc05327c8624bdb6e1377ef87
+Merge: 5f66304 1fa2c70
+Author: alina-t-872 <69516563+alina-t-872@users.noreply.github.com>
+Date:   Sun Oct 26 18:57:43 2025 +0200
+
+    Merge pull request #2 from oop-pub/update_t11-16
+    
+    Merge update_t11-16 into main
+
+commit 1fa2c7008f0ff05b7e11e0bb5c3ffba92e3acc39
+Author: alina-t-872 <alina.tudorache872@gmail.com>
+Date:   Sun Oct 26 18:39:43 2025 +0200
+
+    Updated refs for t3, t4 and added t11-16
+
+commit 5f66304b614b77c3b60ff44e27dff2850949b590
+Author: David Capragiu <63539529+Dievaid@users.noreply.github.com>
+Date:   Fri Oct 24 18:04:16 2025 +0300
+
+    Patch lombok for jdk 25 (#1)
+    
+    Co-authored-by: dievaid <david.capragiu@gmail.com>
+
+commit 440738ae7c0b22ddc09761d3b36fbf361b2caa2c
+Author: dievaid <david.capragiu@gmail.com>
+Date:   Mon Oct 20 23:56:03 2025 +0300
+
+    initial commit
