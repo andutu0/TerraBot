@@ -34,6 +34,14 @@ public final class TerraBot {
     }
 
     /**
+     * Removes a scanned entity to the inventory.
+     * @param entityName the name of the scanned entity (e.g., "Deer", "Rose")
+     */
+    public void removeFromInventory(final String entityName) {
+        inventory.remove(entityName);
+    }
+
+    /**
      * Adds a fact to the knowledge base.
      * @param name the component name
      * @param fact the fact to add

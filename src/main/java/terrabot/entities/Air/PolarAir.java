@@ -10,6 +10,7 @@ public final class PolarAir extends Air {
     private static final int BASE_TEMP = 100;
     private static final double ICE_MULTIPLIER = 0.05;
     private static final int POLAR_MAX_SCORE = 142;
+    private static final double MAX = 100.0;
     private static final double WEATHER_MULTIPLIER = 0.2;
     private static final double TOXICITY_SCORE_MULTIPLIER = 0.8;
 
@@ -30,6 +31,7 @@ public final class PolarAir extends Air {
     public double computeAirQuality() {
         double score = (getOxygenLevel() * 2) + (BASE_TEMP - Math.abs(getTemperature()))
                         - (iceCrystalConcentration * ICE_MULTIPLIER);
+        score = Math.min(score, MAX);
         double quality = normalize(score);
         setAirQuality(score);
         return quality;
@@ -49,6 +51,7 @@ public final class PolarAir extends Air {
     public void computeWeatherChange(final Double arg) {
         setAffectedAirQuality(true);
         double quality = getAirQuality() - WEATHER_MULTIPLIER * arg;
+        quality = normalize(quality);
         setAirQuality(quality);
     }
 }

@@ -116,7 +116,6 @@ public final class MoveRobot {
             res.put("message",
                     "The robot has successfully moved to position ("
                             + bestX + ", " + bestY + ").");
-
             return res;
         } else {
             ObjectNode res = MAPPER.createObjectNode();

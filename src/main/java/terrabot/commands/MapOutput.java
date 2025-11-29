@@ -61,6 +61,9 @@ public final class MapOutput {
                 String airLabel = "poor";
                 if (air != null) {
                     double aq = air.computeAirQuality();
+                    if (sim.isWeatherActive()) {
+                        aq = air.getAirQuality();
+                    }
                     airLabel = sim.qualityLabel(aq);
                 }
                 cellNode.put("airQuality", airLabel);

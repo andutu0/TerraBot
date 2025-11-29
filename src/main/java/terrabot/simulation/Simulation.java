@@ -261,6 +261,7 @@ public final class Simulation {
         }
         for (int time = currTime; time < targetTimestamp; time++) {
             Interactions.interact(simMap, this);
+            maybeRevertWeather(currTime);
         }
         currTime = targetTimestamp;
     }

@@ -56,6 +56,7 @@ public final class ImproveEnvironment {
                 robot.getPosition().getY());
 
         robot.setEnergyStatus(robot.getEnergyStatus() - ENERGY_COST);
+        robot.removeFromInventory(componentName);
         final String message = applyImprovement(cell, improvementType, componentName);
         node.put("message", message);
         return node;

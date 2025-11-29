@@ -11,6 +11,7 @@ public final class DesertAir extends Air {
     private static final double DUST_MULTIPLIER = 0.2;
     private static final double TEMP_MULTIPLIER = 0.3;
     private static final double MAX_SCORE = 65.0;
+    private static final double MAX = 100.0;
     private static final double STORM_SCORE = 30;
     private static final double TOXICITY_SCORE_MULTIPLIER = 0.8;
 
@@ -34,6 +35,7 @@ public final class DesertAir extends Air {
         double score = (getOxygenLevel() * OXYGEN_MULTIPLIER)
                 - (dustParticles * DUST_MULTIPLIER)
                 - (getTemperature() * TEMP_MULTIPLIER);
+        score = Math.min(score, MAX);
         double quality = normalize(score);
         setAirQuality(score);
         affectedAirQuality = false;

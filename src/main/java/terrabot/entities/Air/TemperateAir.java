@@ -11,7 +11,8 @@ public final class TemperateAir extends Air {
     private static final double HUMIDITY_MULTIPLIER = 0.7;
     private static final double POLLEN_MULTIPLIER = 0.1;
     private static final double MAX_SCORE = 84.0;
-    private static final double QUAL_REDUCTION = 15;
+    private static final double MAX = 100.0;
+    private static final double QUAL_REDUCTION = 15.0;
     private static final double TOXICITY_SCORE_MULTIPLIER = 0.8;
 
 
@@ -35,6 +36,7 @@ public final class TemperateAir extends Air {
         double score = (getOxygenLevel() * OXYGEN_MULTIPLIER)
                 + (getHumidity() * HUMIDITY_MULTIPLIER)
                 - (pollenLevel * POLLEN_MULTIPLIER);
+        score = Math.min(score, MAX);
         double quality = normalize(score);
         setAirQuality(score);
         affectedAirQuality = false;
@@ -53,8 +55,9 @@ public final class TemperateAir extends Air {
 
     @Override
     public void computeWeatherChange(final Double arg) {
-        double quality = getAirQuality() - QUAL_REDUCTION;
+        double quality = computeAirQuality() - QUAL_REDUCTION;
         affectedAirQuality = true;
+        quality = normalize(quality);
         setAirQuality(quality);
     }
 }

@@ -36,6 +36,7 @@ public final class TropicalAir extends Air {
         double score = (getOxygenLevel() * OXYGEN_MULTIPLIER)
                 + (getHumidity() * HUMIDITY_MULTIPLIER)
                 - (co2Level * CO2_MULTIPLIER);
+        score = Math.min(score, MAX);
         double quality = normalize(score);
         setAirQuality(quality);
         affectedAirQuality = false;
@@ -54,7 +55,8 @@ public final class TropicalAir extends Air {
 
     @Override
     public void computeWeatherChange(final Double arg) {
-        double quality = getAirQuality() - arg * RAINFALL_MULTIPLIER;
+        double quality = getAirQuality() + arg * RAINFALL_MULTIPLIER;
+        quality = normalize(quality);
         setAirQuality(quality);
         affectedAirQuality = true;
     }

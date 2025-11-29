@@ -42,7 +42,7 @@ public final class ChangeWeatherConditions {
                         air.computeWeatherChange((double) cmd.getNumberOfHikers());
                         break;
                     case "newSeason":
-                        boolean isSpring = cmd.getSeason().equalsIgnoreCase("spring");
+                        boolean isSpring = cmd.getSeason().equalsIgnoreCase("Spring");
                         if (isSpring) {
                             air.computeWeatherChange(null);
                         }

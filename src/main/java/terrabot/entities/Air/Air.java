@@ -71,8 +71,7 @@ public abstract class Air extends Entity {
      */
     protected double finalizeToxicity(final double denominator,
                                       final double thresholdMultiplier) {
-        computeAirQuality();
-        double aq = getAirQuality();
+        double aq = computeAirQuality();
 
         double toxicity = DEFAULT_TOXICITY_MULTIPLIER * (1 - aq / denominator);
         toxicity = Math.max(toxicity, 0);

@@ -232,6 +232,13 @@ public final class Interactions {
                 continue;
             }
 
+            if (neighbour.getAnimal() != null) {
+                if (neighbour.getAnimal().getType().equals("Carnivores")
+                        || neighbour.getAnimal().getType().equals("Parasites")) {
+                    continue;
+                }
+            }
+
             if (!hasNeighbour) {
                 hasNeighbour = true;
                 firstNeighborX = nx;
@@ -296,7 +303,9 @@ public final class Interactions {
         // i know this doesn't make much sense, because if a herbivore
         // moves to a cell with another herbivore, it can't eat it
         // but the tests don't check that so if it works don't fix it
-        if (targetCell.getAnimal() != null) {
+        if (targetCell.getAnimal() != null
+                && (cell.getAnimal().getType().equals("Carnivores")
+                || cell.getAnimal().getType().equals("Parasites"))) {
             targetCell.setPrey(targetCell.getAnimal());
         }
 
