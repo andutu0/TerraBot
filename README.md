@@ -1,6 +1,6 @@
 # TerraBot
 
-## ## Project Overview
+## Project Overview
 
 This project simulates a small ecosystem where a robot moves around a grid and interacts with air, soil, plants, water, and animals. Everything is driven by JSON inputs pre-parsed by the assignment's authors.
 
